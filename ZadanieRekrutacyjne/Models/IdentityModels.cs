@@ -25,9 +25,13 @@ namespace ZadanieRekrutacyjne.Models
         {
         }
 
+        
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<TODOContainer> ToDoBase { get; set; }
     }
 }
