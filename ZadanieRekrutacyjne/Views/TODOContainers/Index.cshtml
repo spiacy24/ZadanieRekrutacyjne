@@ -70,7 +70,7 @@
             @Html.DisplayNameFor(model => model.Group)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Tag)
+            @Html.DisplayNameFor(model => model.User.UserName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.RemindDate)
@@ -91,7 +91,7 @@
                 @Html.DisplayFor(modelItem => item.Group)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tag)
+                @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RemindDate)
@@ -99,11 +99,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsDone)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
+         
         </tr>
     }
 </table>
