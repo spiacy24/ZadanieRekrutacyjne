@@ -28,7 +28,9 @@ namespace ZadanieRekrutacyjne.Controllers
        public ActionResult OtherUserTODO()
         {
             string state = "Public";
-            return View(db.ToDoBase.ToList().Where(x=>x.Tag== state));
+            string IDcurrentUser = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(us => us.Id == IDcurrentUser);
+            return View(db.ToDoBase.ToList().Where(x=>x.Tag== state).Where(x=>x.User!=currentUser));
         }
 
         // GET: TODOContainers/Details/5
