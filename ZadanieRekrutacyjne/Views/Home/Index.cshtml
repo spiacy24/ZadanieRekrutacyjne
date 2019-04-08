@@ -5,6 +5,13 @@
 <div class="jumbotron">
     <h1>TODO</h1>
     <p class="lead">Już teraz zarejestruj się w naszym serwisie.</p>
-    <p><a href="/Account/Register" class="btn btn-primary btn-lg">Zarejestruj się &raquo;</a></p>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <p><a href="/Account/Register" class="btn btn-primary btn-lg">Zarejestruj się &raquo;</a></p>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p><a href="/TODOContainers/Create" class="btn btn-primary btn-lg">Dodaj przypomnienie &raquo;</a></p>
+    }
 </div>
 
