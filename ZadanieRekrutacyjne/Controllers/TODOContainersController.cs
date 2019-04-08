@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using ZadanieRekrutacyjne.Models;
@@ -18,7 +19,16 @@ namespace ZadanieRekrutacyjne.Controllers
         // GET: TODOContainers
         public ActionResult Index()
         {
-            return View(db.ToDoBase.ToList());
+            string IDcurrentUser = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(us => us.Id == IDcurrentUser);
+            return View(db.ToDoBase.ToList().Where(us => us.User == currentUser));
+        }
+
+       
+       public ActionResult OtherUserTODO()
+        {
+            string state = "Public";
+            return View(db.ToDoBase.ToList().Where(x=>x.Tag== state));
         }
 
         // GET: TODOContainers/Details/5
@@ -52,11 +62,15 @@ namespace ZadanieRekrutacyjne.Controllers
             if (ModelState.IsValid)
             {
                 string IDcurrentUser = User.Identity.GetUserId();
-                ApplicationUser currentUser = db.Users.FirstOrDefault(x=> x.Id ==IDcurrentUser);
+                ApplicationUser currentUser = db.Users.FirstOrDefault(us=> us.Id ==IDcurrentUser);
+
                 tODOContainer.User = currentUser;
 
                 db.ToDoBase.Add(tODOContainer);
                 db.SaveChanges();
+
+                SendEmail(tODOContainer.User.UserName, tODOContainer.Title, tODOContainer.Tag, tODOContainer.Group, tODOContainer.RemindDate);
+
                 return RedirectToAction("Index");
             }
 
@@ -127,6 +141,27 @@ namespace ZadanieRekrutacyjne.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void SendEmail(string TO, string subject, string type, string group, DateTime date)
+        {
+            string from = "todoalerttester@gmail.com";
+
+            MailMessage mail = new MailMessage(from, TO);
+
+            SmtpClient client = new SmtpClient();
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Host = "smtp.gmail.com";
+            client.Credentials = new NetworkCredential(from, "h45lo123");
+            mail.Subject = "Przypomnienie o " + subject;
+            mail.Body = "Witamy, uprzejmie przypominamy o następującym zadaniu: \n" +
+                        "Tytuł: " + subject + "\n" +
+                        "Typ: " + type + "\n" +
+                        "Grupa: " + group + "\n" +
+                        "Data: " + date.ToString();
+            client.EnableSsl = true;
+            client.Send(mail);
         }
     }
 }

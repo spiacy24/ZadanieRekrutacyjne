@@ -253,6 +253,7 @@
     <Content Include="Views\TODOContainers\Details.cshtml" />
     <Content Include="Views\TODOContainers\Edit.cshtml" />
     <Content Include="Views\TODOContainers\Index.cshtml" />
+    <Content Include="Views\TODOContainers\OtherUserTODO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
